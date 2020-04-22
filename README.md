@@ -28,7 +28,6 @@ vault-0                                 0/1     Running   0          24m
 vault-1                                 0/1     Running   0          24m
 vault-2                                 0/1     Running   0          24m
 vault-agent-injector-7d4cccc866-7qfkx   1/1     Running   0          24m
-$ 
 ```
 
 The pods will not become ready until they are bootstraped and unsealed which will involve making one of the pod as Raft leader and joining others to this pod. First we will make `Vault-0` as the leader to do that we will run the following commands to initialize Vault and unseal it.
@@ -67,7 +66,6 @@ vault-0                                 1/1     Running   0          2m18s
 vault-1                                 0/1     Running   0          2m18s
 vault-2                                 0/1     Running   0          2m18s
 vault-agent-injector-7d4cccc866-fbmz4   1/1     Running   0          2m19s
-$ 
 ```
 
 Now we will make other pods join the cluster leader `Vault-0` so that they can become part of the Raft cluster and then we have to unseal them. This step will be done for all the remaining pods.
@@ -76,15 +74,19 @@ Now we will make other pods join the cluster leader `Vault-0` so that they can b
 $ kubectl exec -ti vault-1 -n vault --  vault operator raft join -leader-ca-cert="$(cat ./tls/ca-certificate.cert)" --address "https://vault-1.vault-internal:8200" "https://vault-0.vault-internal:8200" 
 Key       Value
 ---       -----
-Joined    true
-$ 
+Joined    true 
 
 # Unseal vault-1
 kubectl exec -ti vault-1 -n vault -- vault operator unseal
 ```
 
 ```
-
+$ kubectl get pods -n vault
+NAME                                    READY   STATUS    RESTARTS   AGE
+vault-0                                 1/1     Running   0          12m
+vault-1                                 1/1     Running   0          12m
+vault-2                                 1/1     Running   0          12m
+vault-agent-injector-7d4cccc866-5vs9w   1/1     Running   0          12m
 ```
 
 After all the pods become part of the Raft cluster and unsealed, all pods will become ready and Vault cluster will be ready to serve any requests.
