@@ -7,7 +7,7 @@ module "gke-cluster" {
   cluster_location           = "northamerica-northeast1-a"
   network                    = "projects/${var.project_id}/global/networks/default"
   subnetwork                 = "projects/${var.project_id}/regions/${var.region}/subnetworks/default"
-  initial_node_count         = 3
+  initial_node_count         = var.cluster_node_count
 }
 
 module "tls" {

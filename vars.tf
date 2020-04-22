@@ -10,6 +10,10 @@ variable "region" {
   type        = string
 }
 
+variable "cluster_node_count" {
+  type        = number
+}
+
 variable "num_vault_pods" {
   type        = number
 }
