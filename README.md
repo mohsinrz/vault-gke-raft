@@ -1,9 +1,9 @@
 # Deploying Vault with integrated storage on GKE
 
-First clone the Terraform code in any location and then also clone the Vault helm chart.
+First, clone the Terraform code in any location and then also clone the Vault helm chart.
 
 ```
-$ git clone https://github.com/ArctiqTeam/vault-gke-raft
+$ git clone https://github.com/mohsinrz/vault-gke-raft
 $ cd vault-gke-raft
 $ git clone https://github.com/hashicorp/vault-helm 
 ```
@@ -11,8 +11,8 @@ $ git clone https://github.com/hashicorp/vault-helm
 Setup gcloud authentication for your account, create a service account which has access to use resources in your project and store the json for this account in the `creds` folder. After that modify the `terraform.tfvars` accordingly and deploy the stack.
 
 ```
-terraform init
-terraform apply
+$ terraform init
+$ terraform apply
 ```
 
 After completion Terraform code will output the URL for accessing the newly deployed Vault. We can check status of the pods using `kubectl` but for that first get the credentials for the GKE cluster.
@@ -30,7 +30,7 @@ vault-2                                 0/1     Running   0          24m
 vault-agent-injector-7d4cccc866-7qfkx   1/1     Running   0          24m
 ```
 
-The pods will not become ready until they are bootstraped and unsealed which will involve making one of the pod as Raft leader and joining others to this pod. First we will make `Vault-0` as the leader to do that we will run the following commands to initialize Vault and unseal it.
+The pods will not become ready until they are bootstrapped and unsealed which will involve making one of the pod as Raft leader and joining others to this pod. First, we will make `vault-0` as the leader to do that we will run the following commands to initialize Vault and unseal it.
 
 ```
 $ kubectl exec -ti vault-0 -n vault -- vault operator init
