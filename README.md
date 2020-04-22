@@ -2,11 +2,11 @@
 
 First clone the Terraform code in any location and then also clone the Vault helm chart.
 
-'''
+```
 $ git clone https://github.com/ArctiqTeam/vault-gke-raft
 $ cd vault-gke-raft
 $ git clone https://github.com/hashicorp/vault-helm 
-'''
+```
 
 Setup gcloud authentication for your account, create a service account which has access to use resources in your project and store the json for this account in the `creds` folder. After that modify the `terraform.tfvars` accordingly and deploy the stack.
 
